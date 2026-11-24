@@ -4,13 +4,25 @@
 
 LV_IMG_DECLARE(bolt);
 
+static void format_level(char *text, size_t size, const struct status_state *state) {
+#if IS_ENABLED(CONFIG_NICE_VIEW_GEM_BATTERY_LABELS)
+    const char *label = state->battery >= CONFIG_NICE_VIEW_GEM_BATTERY_FULL_PCT       ? "FULL"
+                        : state->battery >= CONFIG_NICE_VIEW_GEM_BATTERY_LOW_PCT      ? "OK"
+                        : state->battery > CONFIG_NICE_VIEW_GEM_BATTERY_CRITICAL_PCT ? "LOW"
+                                                                                       : "CHRG!";
+    snprintf(text, size, "%s", label);
+#else
+    snprintf(text, size, "%i%%", state->battery);
+#endif
+}
+
 static void draw_level(lv_obj_t *canvas, const struct status_state *state) {
     lv_draw_label_dsc_t label_right_dsc;
     init_label_dsc(&label_right_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_RIGHT);
 
     char text[10] = {};
 
-    sprintf(text, "%i%%", state->battery);
+    format_level(text, sizeof(text), state);
     canvas_draw_text(canvas, 26, 19, 42, &label_right_dsc, text);
 }
 
@@ -22,7 +34,12 @@ static void draw_charging_level(lv_obj_t *canvas, const struct status_state *sta
 
     char text[10] = {};
 
-    sprintf(text, "%i%%", state->battery);
+#if IS_ENABLED(CONFIG_NICE_VIEW_GEM_BATTERY_LABELS)
+    // The voltage reads high while charging, so don't guess a level.
+    snprintf(text, sizeof(text), "CHG");
+#else
+    format_level(text, sizeof(text), state);
+#endif
     canvas_draw_text(canvas, 26, 19, 35, &label_right_dsc, text);
     canvas_draw_img(canvas, 62, 21, &bolt, &img_dsc);
 }
