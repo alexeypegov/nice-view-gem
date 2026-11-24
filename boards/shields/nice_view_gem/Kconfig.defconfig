@@ -48,7 +48,7 @@ config NICE_VIEW_GEM_ANIMATION_MS
     default 960
 
 config NICE_VIEW_GEM_BATTERY_LABELS
-    bool "Show FULL/OK/LOW/CHRG! (and CHG while charging) instead of the battery percentage"
+    bool "Show FULL/GOOD/LOW/CHRG! (and CHG while charging) instead of the battery percentage"
     default n
 
 config NICE_VIEW_GEM_BATTERY_FULL_PCT

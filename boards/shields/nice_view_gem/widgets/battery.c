@@ -7,7 +7,7 @@ LV_IMG_DECLARE(bolt);
 static void format_level(char *text, size_t size, const struct status_state *state) {
 #if IS_ENABLED(CONFIG_NICE_VIEW_GEM_BATTERY_LABELS)
     const char *label = state->battery >= CONFIG_NICE_VIEW_GEM_BATTERY_FULL_PCT       ? "FULL"
-                        : state->battery >= CONFIG_NICE_VIEW_GEM_BATTERY_LOW_PCT      ? "OK"
+                        : state->battery >= CONFIG_NICE_VIEW_GEM_BATTERY_LOW_PCT      ? "GOOD"
                         : state->battery > CONFIG_NICE_VIEW_GEM_BATTERY_CRITICAL_PCT ? "LOW"
                                                                                        : "CHRG!";
     snprintf(text, size, "%s", label);
